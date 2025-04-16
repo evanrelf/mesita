@@ -29,11 +29,12 @@ fn main() -> anyhow::Result<()> {
         csv_to_rows(builder.from_reader(io::stdin()))?
     };
     let header = rows.pop_front().unwrap();
-    let constraints = vec![Constraint::Fill(1); table_columns];
-    let table = Table::default()
-        .header(header)
-        .rows(rows)
-        .widths(constraints);
+    let mut widths = Vec::new();
+    widths.push(Constraint::Fill(1));
+    for _ in 0..table_columns {
+        widths.push(Constraint::Fill(2));
+    }
+    let table = Table::default().header(header).rows(rows).widths(widths);
     let mut table_state = TableState::default();
     let mut terminal = terminal::enter()?;
     loop {
@@ -72,6 +73,11 @@ fn csv_to_rows(
     for (i, result) in reader.records().enumerate() {
         let record = result?;
         let mut cells = Vec::new();
+        if i == 0 {
+            cells.push(Cell::from(String::from("#")));
+        } else {
+            cells.push(Cell::from(format!("{i}")));
+        }
         let mut row_columns = 0;
         for field in &record {
             let cell = Cell::from(String::from(field));
