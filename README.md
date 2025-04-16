@@ -1,3 +1,3 @@
 # mesita
 
-lil terminal table viewer thing
+lil csv pager thing
