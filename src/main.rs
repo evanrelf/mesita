@@ -1,5 +1,6 @@
 mod terminal;
 
+use clap::Parser as _;
 use ratatui::{
     crossterm::{
         self,
@@ -9,7 +10,11 @@ use ratatui::{
 };
 use std::io;
 
+#[derive(clap::Parser)]
+struct Args {}
+
 fn main() -> anyhow::Result<()> {
+    let _args = Args::parse();
     let mut terminal = terminal::enter()?;
     crossterm::execute!(io::stdout(), event::EnableMouseCapture)?;
     loop {
