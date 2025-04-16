@@ -1,3 +1,5 @@
+mod terminal;
+
 use ratatui::{
     crossterm::{
         self,
@@ -8,7 +10,7 @@ use ratatui::{
 use std::io;
 
 fn main() -> anyhow::Result<()> {
-    let mut terminal = ratatui::init();
+    let mut terminal = terminal::enter()?;
     crossterm::execute!(io::stdout(), event::EnableMouseCapture)?;
     loop {
         terminal.draw(|frame| {
@@ -19,6 +21,6 @@ fn main() -> anyhow::Result<()> {
             break;
         }
     }
-    ratatui::restore();
+    terminal::exit()?;
     Ok(())
 }
